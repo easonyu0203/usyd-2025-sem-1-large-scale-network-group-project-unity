@@ -20,6 +20,10 @@ public class GraphVisualizer : MonoBehaviour
     private GraphDataManager _graphDataManager;
     private GraphFactory _graphFactory;
     
+    // Graph storage
+    private Node[] _nodes;
+    private Edge[,] _edges;
+    
     private void Awake()
     {
         _graphFactory = GetComponent<GraphFactory>();
@@ -31,11 +35,11 @@ public class GraphVisualizer : MonoBehaviour
     private void GraphSetup()
     {
         List<string> tickers = _graphDataManager.Tickers;
-        // tickers = tickers.Take(10).ToList();
-
-        // Create nodes for each ticker at random positions
-        Dictionary<string, Node> nodes = new Dictionary<string, Node>();
-        foreach (string ticker in tickers)
+        int n = tickers.Count;
+        
+        // Initialize node array
+        _nodes = new Node[n];
+        for (int i = 0; i < n; i++)
         {
             // Generate random position within [-half_length, half_length]^3
             Vector3 randomPosition = new Vector3(
@@ -43,20 +47,21 @@ public class GraphVisualizer : MonoBehaviour
                 Random.Range(-half_length, half_length),
                 Random.Range(-half_length, half_length)
             );
-            Node node = _graphFactory.CreateNode(ticker, randomPosition);
-            nodes[ticker] = node;
+            _nodes[i] = _graphFactory.CreateNode(tickers[i], randomPosition);
         }
 
-        // Create edges for every pair of nodes
-        for (int i = 0; i < tickers.Count; i++)
+        // Initialize edge and weight matrices
+        _edges = new Edge[n, n];
+        
+        // Create edges for every pair (i,j) where i < j
+        for (int i = 0; i < n; i++)
         {
-            for (int j = i + 1; j < tickers.Count; j++)
+            for (int j = i + 1; j < n; j++)
             {
-                Node node1 = nodes[tickers[i]];
-                Node node2 = nodes[tickers[j]];
-                Edge edge = _graphFactory.CreateEdge(node1, node2);
-                // Optionally set initial visibility based on threshold (if weights are available)
-                edge.SetVisibility(true); // Default to hidden; update in UpdateGraph if needed
+                Edge edge = _graphFactory.CreateEdge(_nodes[i], _nodes[j]);
+                _edges[i, j] = edge;
+                _edges[j, i] = edge; // Same edge object for undirected graph
+                edge.SetVisibility(true); // Initially hidden
             }
         }
     }

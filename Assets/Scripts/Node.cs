@@ -3,11 +3,11 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     // Unique identifier or other properties
-    public string NodeId { get; private set; }
+    public string Ticker { get; private set; }
 
-    public void Initialize(string id, Vector3 position)
+    public void Initialize(string ticker, Vector3 position)
     {
-        NodeId = id;
+        Ticker = ticker;
         transform.position = position;
     }
 }

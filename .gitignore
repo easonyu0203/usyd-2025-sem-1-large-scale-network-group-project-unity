@@ -6,6 +6,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+Logs/
 
 # Visual Studio / MonoDevelop
 *.csproj

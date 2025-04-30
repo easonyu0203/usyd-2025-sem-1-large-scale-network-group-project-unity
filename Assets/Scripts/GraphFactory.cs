@@ -19,7 +19,7 @@ public class GraphFactory : MonoBehaviour
     {
         GameObject edgeObj = Instantiate(edgePrefab, Vector3.zero, Quaternion.identity);
         Edge edge = edgeObj.GetComponent<Edge>();
-        edge.Initialize(startNode, endNode);
+        edge.Initialize(startNode, endNode, 0);
         return edge;
     }
 }

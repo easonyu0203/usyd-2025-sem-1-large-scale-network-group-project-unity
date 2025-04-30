@@ -60,7 +60,7 @@ public class UIController : MonoBehaviour
         // initialize threshold slider
         thresholdSlider.minValue = 0.0f;
         thresholdSlider.maxValue = 1.0f;
-        thresholdSlider.value = 0.5f;
+        thresholdSlider.value = 0.8f;
         thresholdSlider.onValueChanged.AddListener(OnThresholdSliderChanged);
         
         // initial update

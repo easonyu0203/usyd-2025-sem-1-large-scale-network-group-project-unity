@@ -2204,6 +2204,7 @@ GameObject:
   - component: {fileID: 2656903261208173122}
   - component: {fileID: 3453129557008526827}
   - component: {fileID: 5495786327937455727}
+  - component: {fileID: 5495786327937455730}
   - component: {fileID: 5495786327937455728}
   - component: {fileID: 5495786327937455729}
   m_Layer: 0
@@ -2261,6 +2262,23 @@ MonoBehaviour:
   windowSizeText: {fileID: 771221814}
   thresholdSlider: {fileID: 1257737164}
   thresholdText: {fileID: 1647196773}
+--- !u!114 &5495786327937455730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5495786327937455726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c157e174abc7c4eb4a5d7731ee80408e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ideaDistance: 30
+  ideaDistCoef: 0.1
+  l2_coef: 0.01
+  epsilon: 0.01
+  cellSize: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

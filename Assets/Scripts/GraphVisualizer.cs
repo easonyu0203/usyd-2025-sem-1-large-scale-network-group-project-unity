@@ -13,13 +13,14 @@ public class GraphVisualizer : MonoBehaviour
     [SerializeField] private float threshold = 0.5f;
     [Tooltip("the half length of the volume cube [-half_length, half_length]^3")]
     [SerializeField] private float half_length = 10.0f;
-    
+
     [Header("Prefab Configuration")]
     [SerializeField] private GameObject nodePrefab;
     [SerializeField] private GameObject edgePrefab;
     
     private GraphDataManager _graphDataManager;
     private GraphFactory _graphFactory;
+    private ForceDirectAlgo _forceDirectAlgo;
     
     private bool _needsVisibilityUpdate; // Flag to queue visibility update
     
@@ -31,6 +32,7 @@ public class GraphVisualizer : MonoBehaviour
     {
         _graphFactory = GetComponent<GraphFactory>();
         _graphDataManager = GetComponent<GraphDataManager>();
+        _forceDirectAlgo = GetComponent<ForceDirectAlgo>();
         _graphDataManager.OnSetupComplete += GraphSetup;
         _graphDataManager.OnCorrMatrixDataUpdated += UpdateGraph;
     }
@@ -52,6 +54,17 @@ public class GraphVisualizer : MonoBehaviour
             UpdateVisibility();
             _needsVisibilityUpdate = false;
         }
+        
+    }
+
+    private void FixedUpdate()
+    {
+        if (_graphDataManager.IsInitialized == false)
+        {
+            return;
+        }
+        
+        _forceDirectAlgo.ComputeForce(_nodes, _edges);
     }
 
     private void GraphSetup()

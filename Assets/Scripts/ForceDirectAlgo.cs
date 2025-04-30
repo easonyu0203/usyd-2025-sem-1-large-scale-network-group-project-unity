@@ -10,8 +10,6 @@ public class ForceDirectAlgo : MonoBehaviour
     [SerializeField] private float ideaDistance = 4.0f;
     [Tooltip("Idea distance coefficient")]
     [SerializeField] private float ideaDistCoef = 0.01f;
-    [Tooltip("Friend power coefficient")]
-    [SerializeField] private float friendCoef = 0.01f;
     [Tooltip("l2 regulize to (0,0,0)")]
     [SerializeField] private float l2_coef = 1f;
     
@@ -49,22 +47,12 @@ public class ForceDirectAlgo : MonoBehaviour
                 Vector3 direction = delta.normalized;
                 float d_uv = delta.magnitude; // Euclidean distance
                 
-                // force for "to idea distance"
-                float f_to_idea = ideaDistance - d_uv;
-                
-                // force for "stay with friend"
-                float f_friend = 0.0f;
-                f_friend = d_uv * math.max(w_uv, 0);
-                
+                // force for "to idea distance", with consideration of edge's weight
+                float f_to_idea = (1 - w_uv) * ideaDistance - d_uv;
+
                 // aggregate forces
-                _netForces[u] += direction * (
-                    -f_to_idea * ideaDistCoef +
-                    f_friend * friendCoef
-                );
-                _netForces[v] += direction * (
-                    f_to_idea * ideaDistCoef +
-                    -f_friend * friendCoef
-                );
+                _netForces[u] += direction * (-f_to_idea * ideaDistCoef);
+                _netForces[v] += direction * (f_to_idea * ideaDistCoef);
             }
         }
         

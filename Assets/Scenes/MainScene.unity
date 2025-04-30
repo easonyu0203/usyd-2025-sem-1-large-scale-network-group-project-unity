@@ -2275,8 +2275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ideaDistance: 30
-  ideaDistCoef: 0.05
-  friendCoef: 0.05
+  ideaDistCoef: 0.2
   l2_coef: 0.01
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -51,7 +51,7 @@ public class UIController : MonoBehaviour
         windowSizeSlider.onValueChanged.AddListener(OnWindowSizeSliderChanged);
         
         // initialize date slider
-        dateSlider.minValue = 0;
+        dateSlider.minValue = 100;
         dateSlider.maxValue = dates.Count - 1;
         dateSlider.wholeNumbers = true;
         dateSlider.value = windowSizeSlider.value; // default to first portion
@@ -60,7 +60,7 @@ public class UIController : MonoBehaviour
         // initialize threshold slider
         thresholdSlider.minValue = 0.0f;
         thresholdSlider.maxValue = 1.0f;
-        thresholdSlider.value = 0.8f;
+        thresholdSlider.value = 0.5f;
         thresholdSlider.onValueChanged.AddListener(OnThresholdSliderChanged);
         
         // initial update

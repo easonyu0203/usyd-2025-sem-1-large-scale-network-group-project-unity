@@ -97,7 +97,7 @@ public class GraphVisualizer : MonoBehaviour
             for (int j = i + 1; j < n; j++)
             {
                 Edge e = _edges[i, j];
-                e.Weight = _graphDataManager.CurrentCorrMatrix[i][j];
+                e.Weight = _graphDataManager.CurrentCorrMatrix[i,j];
             }
         }
 

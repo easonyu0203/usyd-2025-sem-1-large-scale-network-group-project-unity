@@ -21,7 +21,7 @@ public class CorrMatrixResponse
 
 public class GraphDataManager : MonoBehaviour
 {
-    [SerializeField] private string serverUrl = "http://localhost:5000/api";
+    [SerializeField] private string serverUrl = "http://localhost:5001/api";
     
     private SetupResponse _setupData;
     private CorrMatrixResponse _currentCorrMatrixData;
@@ -33,7 +33,8 @@ public class GraphDataManager : MonoBehaviour
     public bool IsInitialized => _isInitialized;
     public List<string> Tickers => _setupData?.Tickers;
     public List<string> Dates => _setupData?.Dates;
-    public CorrMatrixResponse CurrentCorrMatrixData => _currentCorrMatrixData;
+    public List<List<float>> CurrentCorrMatrix => _currentCorrMatrixData.Matrix;
+    public string CurrentDate => _currentCorrMatrixData.Date;
 
     private void Start()
     {
@@ -63,7 +64,7 @@ public class GraphDataManager : MonoBehaviour
         }
     }
     
-    public void RequestGraphForDate(string date, int windowSize)
+    public void RequestCorrMatrix(string date, int windowSize)
     {
         if (!_isInitialized)
         {
@@ -76,7 +77,7 @@ public class GraphDataManager : MonoBehaviour
     
     private IEnumerator FetchCorrMatrixData(string date, int windowSize)
     {
-        string url = $"{serverUrl}/api/corr_matrix/{date}?window_size={windowSize}";
+        string url = $"{serverUrl}/corr_matrix/{date}?window_size={windowSize}";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             yield return webRequest.SendWebRequest();

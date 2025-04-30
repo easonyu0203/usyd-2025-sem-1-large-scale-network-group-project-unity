@@ -22,6 +22,8 @@ public class CorrMatrixResponse
 public class GraphDataManager : MonoBehaviour
 {
     [SerializeField] private string serverUrl = "http://localhost:5001/api";
+    [SerializeField] private string defaultDate = "2015-02-01";
+    [SerializeField] private int defaultWindowSize = 60;
     
     private SetupResponse _setupData;
     private CorrMatrixResponse _currentCorrMatrixData;
@@ -39,6 +41,7 @@ public class GraphDataManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(InitializeSetup());
+        OnSetupComplete += () => RequestCorrMatrix(defaultDate, defaultWindowSize);
     }
     
     private IEnumerator InitializeSetup()

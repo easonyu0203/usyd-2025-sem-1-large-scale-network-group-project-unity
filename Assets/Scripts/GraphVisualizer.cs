@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -20,6 +21,8 @@ public class GraphVisualizer : MonoBehaviour
     private GraphDataManager _graphDataManager;
     private GraphFactory _graphFactory;
     
+    private bool _needsVisibilityUpdate; // Flag to queue visibility update
+    
     // Graph storage
     private Node[] _nodes;
     private Edge[,] _edges;
@@ -30,6 +33,25 @@ public class GraphVisualizer : MonoBehaviour
         _graphDataManager = GetComponent<GraphDataManager>();
         _graphDataManager.OnSetupComplete += GraphSetup;
         _graphDataManager.OnCorrMatrixDataUpdated += UpdateGraph;
+    }
+    
+    private void OnValidate()
+    {
+        // Queue visibility update
+        if (_edges != null && _nodes != null)
+        {
+            _needsVisibilityUpdate = true;
+        }
+    }
+    
+    private void Update()
+    {
+        // Process queued visibility update
+        if (_needsVisibilityUpdate)
+        {
+            UpdateVisibility();
+            _needsVisibilityUpdate = false;
+        }
     }
 
     private void GraphSetup()
@@ -61,13 +83,38 @@ public class GraphVisualizer : MonoBehaviour
                 Edge edge = _graphFactory.CreateEdge(_nodes[i], _nodes[j]);
                 _edges[i, j] = edge;
                 _edges[j, i] = edge; // Same edge object for undirected graph
-                edge.SetVisibility(true); // Initially hidden
+                edge.SetVisibility(false); // Initially hidden
             }
         }
     }
 
     private void UpdateGraph()
     {
-        
+        // update weight for every edges
+        int n = _nodes.Length;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                Edge e = _edges[i, j];
+                e.Weight = _graphDataManager.CurrentCorrMatrix[i][j];
+            }
+        }
+
+        UpdateVisibility();
+    }
+
+    private void UpdateVisibility()
+    {
+        int n = _nodes.Length;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                Edge e = _edges[i, j];
+                bool visible = math.abs(e.Weight) >= threshold;
+                e.SetVisibility(visible);
+            }
+        }
     }
 }

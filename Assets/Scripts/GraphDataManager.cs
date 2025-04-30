@@ -22,9 +22,7 @@ public class CorrMatrixResponse
 public class GraphDataManager : MonoBehaviour
 {
     [SerializeField] private string serverUrl = "http://localhost:5001/api";
-    [SerializeField] private string defaultDate = "2015-02-01";
-    [SerializeField] private int defaultWindowSize = 60;
-    
+
     private SetupResponse _setupData;
     private CorrMatrixResponse _currentCorrMatrixData;
     private bool _isInitialized = false;
@@ -41,7 +39,6 @@ public class GraphDataManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(InitializeSetup());
-        OnSetupComplete += () => RequestCorrMatrix(defaultDate, defaultWindowSize);
     }
     
     private IEnumerator InitializeSetup()
@@ -90,12 +87,31 @@ public class GraphDataManager : MonoBehaviour
                 string response = webRequest.downloadHandler.text;
                 _currentCorrMatrixData = JsonConvert.DeserializeObject<CorrMatrixResponse>(response);
                 
+                // Replace NaN values with 0 in the correlation matrix
+                ReplaceNaNWithZero(_currentCorrMatrixData);
+                
                 Debug.Log($"Received graph data for {date}");
                 OnCorrMatrixDataUpdated?.Invoke();
             }
             else
             {
                 Debug.LogError($"Graph data request failed: {webRequest.error}");
+            }
+        }
+    }
+    
+    private void ReplaceNaNWithZero(CorrMatrixResponse data)
+    {
+        if (data == null || data.Matrix == null) return;
+
+        for (int i = 0; i < data.Matrix.Count; i++)
+        {
+            for (int j = 0; j < data.Matrix[i].Count; j++)
+            {
+                if (float.IsNaN(data.Matrix[i][j]))
+                {
+                    data.Matrix[i][j] = 0f;
+                }
             }
         }
     }

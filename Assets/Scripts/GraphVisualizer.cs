@@ -106,6 +106,11 @@ public class GraphVisualizer : MonoBehaviour
 
     private void UpdateVisibility()
     {
+        if (_nodes == null)
+        {
+            return;
+        }
+        
         int n = _nodes.Length;
         for (int i = 0; i < n; i++)
         {
@@ -116,5 +121,13 @@ public class GraphVisualizer : MonoBehaviour
                 e.SetVisibility(visible);
             }
         }
+    }
+
+    public void SetThreshold(float value)
+    {
+        value = math.min(math.max(value, 0.0f), 1.0f);
+        threshold = value;
+
+        UpdateVisibility();
     }
 }

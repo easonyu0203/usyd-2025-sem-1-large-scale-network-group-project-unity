@@ -26,7 +26,7 @@ public class GraphDataManagerTester : MonoBehaviour
 
             if (GUILayout.Button("Test RequestCorrMatrix"))
             {
-                if (tester._graphDataManager.IsInitialized)
+                if (tester._graphDataManager != null && tester._graphDataManager.IsInitialized)
                 {
                     tester._graphDataManager.RequestCorrMatrix(tester.testDate, tester.testWindowSize);
                 }

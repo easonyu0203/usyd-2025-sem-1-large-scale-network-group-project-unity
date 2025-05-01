@@ -48,7 +48,7 @@ public class ForceDirectAlgo : MonoBehaviour
                 float d_uv = delta.magnitude; // Euclidean distance
                 
                 // force for "to idea distance", with consideration of edge's weight
-                float f_to_idea = (1 - w_uv) * ideaDistance - d_uv;
+                float f_to_idea = (1 - math.abs(w_uv)) * ideaDistance - d_uv;
 
                 // aggregate forces
                 _netForces[u] += direction * (-f_to_idea * ideaDistCoef);

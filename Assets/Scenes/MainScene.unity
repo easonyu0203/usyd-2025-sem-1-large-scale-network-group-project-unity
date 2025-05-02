@@ -932,20 +932,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverUrl: http://0.0.0.0:5001/api
---- !u!114 &3453129557008526827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5495786327937455726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2618b54cc6d64d2fa898314ee8be4af3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testDate: 2015-02-01
-  testWindowSize: 30
 --- !u!4 &5441775195674628933
 Transform:
   m_ObjectHideFlags: 0
@@ -971,7 +957,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5441775195674628933}
   - component: {fileID: 2656903261208173122}
-  - component: {fileID: 3453129557008526827}
   - component: {fileID: 5495786327937455727}
   - component: {fileID: 5495786327937455730}
   - component: {fileID: 5495786327937455728}
@@ -1013,6 +998,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 277394449260123050, guid: 4e4eb8b7d20f848e19eee0758c65b48f, type: 3}
   edgePrefab: {fileID: 7210258440817220724, guid: 55b551036e81c4806a2498aa08ca4e31, type: 3}
+  sectorMaterials:
+  - {fileID: 2100000, guid: 11ced018e58004ba2b82552d590e8f9d, type: 2}
+  - {fileID: 2100000, guid: cbc2e015c3568406e9817f0a0758268b, type: 2}
+  - {fileID: 2100000, guid: 307b03ef1b2a04064b7f90d6215b5dca, type: 2}
+  - {fileID: 2100000, guid: 616b6a5e1bef849e68fd5ad10288d35f, type: 2}
+  - {fileID: 2100000, guid: 8bcb0677656104b95843dfc5569aef69, type: 2}
+  - {fileID: 2100000, guid: af357b6755f9b41bbb859497bbb95e6c, type: 2}
+  - {fileID: 2100000, guid: e8e70bc8fd5724816a2995d205b42f64, type: 2}
+  - {fileID: 2100000, guid: ce4c43dfb158e4e27bdfea838d13c701, type: 2}
+  - {fileID: 2100000, guid: b5078948ee2444846986efb63ad49886, type: 2}
+  - {fileID: 2100000, guid: 88133d244a8794b89ae4769e180649dc, type: 2}
 --- !u!114 &5495786327937455729
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,12 +6,14 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 [Serializable]
 public class SetupResponse
 {
     public List<string> Tickers = new List<string>();
     public List<string> Dates = new List<string>();
+    public Dictionary<string, List<string>> SectorToTickers = new Dictionary<string, List<string>>();
 }
 
 [Serializable]
@@ -38,6 +40,7 @@ public class GraphDataManager : MonoBehaviour
     public bool IsInitialized => _isInitialized;
     public List<string> Tickers => _setupData?.Tickers;
     public List<string> Dates => _setupData?.Dates;
+    public Dictionary<string, List<string>> SectorToTickers => _setupData?.SectorToTickers;
     public float[,] CurrentCorrMatrix => _currentCorrMatrixData?.Matrix;
     public string CurrentDate => _currentCorrMatrixData?.Date;
 
@@ -61,7 +64,18 @@ public class GraphDataManager : MonoBehaviour
                 string response = webRequest.downloadHandler.text;
                 _setupData = JsonConvert.DeserializeObject<SetupResponse>(response);
                 
-                // Initialize _currentCorrMatrixData with preallocated matrix
+                // Handle SectorToTickers JSON field mapping
+                if (_setupData != null)
+                {
+                    // Check if we need to map from sector_2_tickers to SectorToTickers
+                    var jsonObject = JObject.Parse(response);
+                    if (jsonObject["sector_2_tickers"] != null && (_setupData.SectorToTickers == null || _setupData.SectorToTickers.Count == 0))
+                    {
+                        _setupData.SectorToTickers = jsonObject["sector_2_tickers"].ToObject<Dictionary<string, List<string>>>();
+                    }
+                }
+                
+                // Initialize _currentCorrMatrixData with pre-allocated matrix
                 int n = _setupData!.Tickers.Count;
                 _currentCorrMatrixData = new CorrMatrixResponse
                 {
@@ -70,7 +84,7 @@ public class GraphDataManager : MonoBehaviour
                 
                 _isInitialized = true;
                 
-                Debug.Log($"Setup successful. Found {_setupData?.Tickers.Count} tickers and {_setupData?.Dates.Count} dates.");
+                Debug.Log($"Setup successful. Found {_setupData?.Tickers.Count} tickers, {_setupData?.Dates.Count} dates, and {_setupData?.SectorToTickers?.Count} sectors.");
                 OnSetupComplete?.Invoke();
             }
             else
@@ -89,6 +103,32 @@ public class GraphDataManager : MonoBehaviour
         }
         
         StartCoroutine(FetchCorrMatrixData(date, windowSize));
+    }
+
+    public int GetSectorIdxByTicker(string ticker)
+    {
+        if (!_isInitialized || _setupData?.SectorToTickers == null)
+        {
+            Debug.LogWarning("Cannot get sector index: Setup data not initialized or SectorToTickers is null");
+            return -1;
+        }
+
+        // Get sorted list of sector keys
+        List<string> sortedSectors = new List<string>(_setupData.SectorToTickers.Keys);
+        sortedSectors.Sort();
+
+        // Find the sector containing the ticker
+        for (int i = 0; i < sortedSectors.Count; i++)
+        {
+            string sector = sortedSectors[i];
+            if (_setupData.SectorToTickers[sector].Contains(ticker))
+            {
+                return i;
+            }
+        }
+
+        Debug.LogWarning($"Ticker {ticker} not found in any sector");
+        return -1;
     }
     
     private IEnumerator FetchCorrMatrixData(string date, int windowSize)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -76,13 +77,16 @@ public class GraphVisualizer : MonoBehaviour
         _nodes = new Node[n];
         for (int i = 0; i < n; i++)
         {
+            // get sector id
+            int sectorIdx = _graphDataManager.GetSectorIdxByTicker(tickers[i]);
+            
             // Generate random position within [-half_length, half_length]^3
             Vector3 randomPosition = new Vector3(
                 Random.Range(-half_length, half_length),
                 Random.Range(-half_length, half_length),
                 Random.Range(-half_length, half_length)
             );
-            _nodes[i] = _graphFactory.CreateNode(tickers[i], randomPosition);
+            _nodes[i] = _graphFactory.CreateNode(tickers[i], randomPosition, sectorIdx);
         }
 
         // Initialize edge and weight matrices

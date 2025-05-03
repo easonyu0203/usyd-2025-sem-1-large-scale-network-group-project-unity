@@ -11,7 +11,7 @@ public class Edge : MonoBehaviour
 
     private void Update()
     {
-        if (_isInitialized == false)
+        if (_isInitialized == false || _lineRenderer.enabled == false)
         {
             return;
         }
@@ -34,12 +34,6 @@ public class Edge : MonoBehaviour
         _lineRenderer.startWidth = 0.1f;
         _lineRenderer.endWidth = 0.1f;
         _isInitialized = true;
-    }
-
-    public void UpdatePosition(Vector3 startPos, Vector3 endPos)
-    {
-        _lineRenderer.SetPosition(0, startPos);
-        _lineRenderer.SetPosition(1, endPos);
     }
 
     // Set the visibility of the edge
